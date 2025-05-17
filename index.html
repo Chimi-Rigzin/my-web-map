@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enhanced Web Map</title>
+  <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.29/"></script>
+  <style>
+    html, body, #viewDiv {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="viewDiv"></div>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/layers/GeoJSONLayer",
+      "esri/widgets/Locate",
+      "esri/widgets/Legend",
+      "esri/widgets/Search",
+      "esri/widgets/LayerList",
+      "esri/widgets/BasemapToggle",
+      "esri/widgets/Measurement",
+      "esri/widgets/Fullscreen",
+      "esri/widgets/Compass"
+    ], function(
+      Map, MapView, GeoJSONLayer,
+      Locate, Legend, Search, LayerList, BasemapToggle,
+      Measurement, Fullscreen, Compass
+    ) {
+
+      const geojsonLayer = new GeoJSONLayer({
+        url: "./my_layer.geojson",
+        title: "My GeoJSON Layer",
+        popupTemplate: {
+          title: "{name}",
+          content: "Feature: {name}"
+        }
+      });
+
+      const map = new Map({
+        basemap: "streets-vector",
+        layers: [geojsonLayer]
+      });
+
+      const view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [90.4125, 27.4728], // Thimphu
+        zoom: 12
+      });
+
+      // Add basic widgets
+      view.ui.add(new Search({ view }), "top-right");
+      view.ui.add(new LayerList({ view }), "top-right");
+      view.ui.add(new BasemapToggle({ view, nextBasemap: "satellite" }), "bottom-right");
+      view.ui.add(new Legend({ view }), "bottom-left");
+
+      // 📍 Add Geolocation (Locate Widget)
+      const locate = new Locate({ view: view });
+      view.ui.add(locate, "top-left");
+
+      // 📏 Add Measurement Widget
+      const measurement = new Measurement({ view: view });
+      view.ui.add(measurement, "top-left");
+
+      // 🧭 Add Compass
+      const compass = new Compass({ view: view });
+      view.ui.add(compass, "top-left");
+
+      // 🖥️ Add Fullscreen Button
+      const fullscreen = new Fullscreen({ view: view });
+      view.ui.add(fullscreen, "top-right");
+    });
+  </script>
+</body>
+</html>
