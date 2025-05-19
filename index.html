@@ -1,84 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Enhanced Web Map</title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+  <meta charset="UTF-8">
+  <title>Bhutan Forestry</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css">
   <script src="https://js.arcgis.com/4.29/"></script>
-  <style>
-    html, body, #viewDiv {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <div id="viewDiv"></div>
+  <!-- White header with left-aligned content -->
+  <header class="map-header">
+    <div class="header-content">
+      <div class="logo-group">
+        <img src="images/logo1.png" alt="Department Logo" class="header-logo">
+        <img src="images/logo2.png" alt="Partner Logo" class="header-logo">
+      </div>
+      <div class="title-group">
+        <h1>Bhutan Forestry</h1>
+        <p class="header-description">An interactive geospatial platform visualizing Bhutan's protected forest network</p>
+      </div>
+    </div>
+  </header>
 
-  <script>
-    require([
-      "esri/Map",
-      "esri/views/MapView",
-      "esri/layers/GeoJSONLayer",
-      "esri/widgets/Locate",
-      "esri/widgets/Legend",
-      "esri/widgets/Search",
-      "esri/widgets/LayerList",
-      "esri/widgets/BasemapToggle",
-      "esri/widgets/Measurement",
-      "esri/widgets/Fullscreen",
-      "esri/widgets/Compass"
-    ], function(
-      Map, MapView, GeoJSONLayer,
-      Locate, Legend, Search, LayerList, BasemapToggle,
-      Measurement, Fullscreen, Compass
-    ) {
+  <div class="container">
+    <!-- Layer List Sidebar (left) -->
+    <div id="layerListContainer"></div>
+    
+    <!-- Main Map View (center) -->
+    <div id="viewDiv"></div>
+    
+    <!-- Dashboard Panel (right) - Initially hidden -->
+    <div id="dashboard" class="dashboard hidden">
+      <div class="dashboard-header">
+        <h2>Feature Information</h2>
+        <button id="closeDashboard" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="featureInfo">
+        <div class="empty-state">
+          <i class="fas fa-info-circle"></i>
+          <p>Click on any feature to view details</p>
+        </div>
+      </div>
+      <div id="statistics" class="stats-panel">
+        <h3>Summary Statistics</h3>
+        <div class="stats-grid"></div>
+      </div>
+    </div>
+  </div>
 
-      const geojsonLayer = new GeoJSONLayer({
-        url: "./my_layer.geojson",
-        title: "My GeoJSON Layer",
-        popupTemplate: {
-          title: "{name}",
-          content: "Feature: {name}"
-        }
-      });
-
-      const map = new Map({
-        basemap: "streets-vector",
-        layers: [geojsonLayer]
-      });
-
-      const view = new MapView({
-        container: "viewDiv",
-        map: map,
-        center: [90.4125, 27.4728], // Thimphu
-        zoom: 12
-      });
-
-      // Add basic widgets
-      view.ui.add(new Search({ view }), "top-right");
-      view.ui.add(new LayerList({ view }), "top-right");
-      view.ui.add(new BasemapToggle({ view, nextBasemap: "satellite" }), "bottom-right");
-      view.ui.add(new Legend({ view }), "bottom-left");
-
-      // 📍 Add Geolocation (Locate Widget)
-      const locate = new Locate({ view: view });
-      view.ui.add(locate, "top-left");
-
-      // 📏 Add Measurement Widget
-      const measurement = new Measurement({ view: view });
-      view.ui.add(measurement, "top-left");
-
-      // 🧭 Add Compass
-      const compass = new Compass({ view: view });
-      view.ui.add(compass, "top-left");
-
-      // 🖥️ Add Fullscreen Button
-      const fullscreen = new Fullscreen({ view: view });
-      view.ui.add(fullscreen, "top-right");
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
